@@ -20,7 +20,7 @@ namespace TestAPI.Controllers
         {
             this.testDb = testDb;
         }
-
+         
         [HttpGet("getByUserId/{id}")]
         public async Task<IActionResult> GetByUserId(string id)
         {
@@ -50,7 +50,7 @@ namespace TestAPI.Controllers
             }
         }
              
-        [HttpPut("{id}")]
+        [HttpPut("deposit/{id}")]
         public async Task<IActionResult> Deposit(int id, decimal amount)
         {
             try
@@ -71,7 +71,7 @@ namespace TestAPI.Controllers
             }
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("withdraw/{id}")]
         public async Task<IActionResult> Withdraw(int id, decimal amount)
         {
             try
@@ -94,7 +94,7 @@ namespace TestAPI.Controllers
 
         private IActionResult ErrorMsg(Exception E)
         {
-            var msg = "System encountered error. Please contact Bank Admin, thank you!";
+            var msg = "System encountered error. Please contact the Bank Admin, thank you!";
             return StatusCode(500, msg);
         }
     }
