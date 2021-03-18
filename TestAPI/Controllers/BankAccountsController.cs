@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,10 +16,12 @@ namespace TestAPI.Controllers
     public class BankAccountsController : ControllerBase
     {
         readonly ITestDb testDb;
+        private readonly ILogger<BankAccountsController> logger;
 
-        public BankAccountsController(ITestDb testDb)
+        public BankAccountsController(ITestDb testDb, ILogger<BankAccountsController> logger)
         {
             this.testDb = testDb;
+            this.logger = logger;
         }
          
         [HttpGet("getByUserId/{id}")]
@@ -58,7 +61,7 @@ namespace TestAPI.Controllers
                     if (testDb.GetById(id) != null)
                     {
                         var result = await testDb.Deposit(id, amount);
-                        return NoContent();
+                        return Ok(DateTime.Now);
                     }
                     else
                     {
@@ -79,7 +82,7 @@ namespace TestAPI.Controllers
                 if (testDb.GetById(id) != null)
                 {
                     var result = await testDb.Withdraw(id, amount);
-                    return NoContent();
+                    return Ok(DateTime.Now);
                 }
                 else
                 {
@@ -94,6 +97,7 @@ namespace TestAPI.Controllers
 
         private IActionResult ErrorMsg(Exception E)
         {
+            logger.LogError($"Error: {E}");
             var msg = "System encountered error. Please contact the Bank Admin, thank you!";
             return StatusCode(500, msg);
         }
